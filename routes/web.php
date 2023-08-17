@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\CursosController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -13,6 +14,16 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
+Route::get(
+    '/',
+    function () {
+        return view('template');
+    }
+);
+
+//se deriva de  controllers la clase con el metodo index o la funcio de la view
+Route::get('/cursos', [CursosController::class, 'index']);
+
+
+
+Route::get('/formulario', [CursosController::class, 'getForm']);
