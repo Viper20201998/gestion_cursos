@@ -37,3 +37,9 @@ Route::post('/registro', [CursosController::class, 'store'])->name('registrarCur
 
 //update_at
 //create_at => fecha de registro
+
+
+Route::get('/editar/{id}', [CursosController::class, 'editar'])->name('editarCurso');
+Route::put('/actualizar/{id}', [CursosController::class, 'update'])->name('actualizarCurso');
+
+Route::delete('/eliminar/{id}', [CursosController::class, 'destroy'])->name('eliminarCurso');

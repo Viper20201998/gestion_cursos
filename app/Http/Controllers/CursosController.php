@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Cursos;
 use App\Models\Instructor;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 
 class CursosController extends Controller
@@ -80,4 +81,61 @@ class CursosController extends Controller
     }
 
     //CRUD => index() (leer), store() crear, update() actualizar, destroy()
+
+
+    //retornar vista con los datos de un curso en especifico
+    public function editar($id)
+    {
+
+        //select * from table where id = 4 => find()
+        $curso = Cursos::join('instructor', 'courses.id_instructor', '=', 'instructor.id')->select('courses.*', 'instructor.name')->find($id);
+
+        $instructores = Instructor::all();
+        return view("paginas.editar_curso", array("curso" => $curso, "instructores" => $instructores));
+    }
+
+
+    public function update(Request $request, $id)
+    {
+        //validando la entradad de imagenes
+        //true, false
+        if ($request->hasFile('imagen')) {
+            $imagen = $request->file('imagen');
+
+            //formatear el nombre de la imagen
+            //react Js - react-js.jpg
+            $nombre_imagen = Str::slug($request->post('titulo')) . "." . $imagen->guessExtension();
+            //asignamos la ruta donde se guardan las imagenes
+            $ruta = public_path("img/");
+            //public/
+            //hacemos una copia del archivo y lo almacenamos en la ruta img
+            copy($imagen->getRealPath(), $ruta . $nombre_imagen);
+            //public/img/react-js.jpg
+        } else {
+            $nombre_imagen = $request->post('imagen_previa');
+        }
+
+        //metodo save() para guardar datos como insert into
+        $cursos = Cursos::all()->find($id);
+        $cursos->title = $request->post('titulo');
+        $cursos->description = $request->post('descripcion');
+        $cursos->price = $request->post('precio');
+        $cursos->imagen = $nombre_imagen;
+        $cursos->id_instructor = $request->post('instructor');
+        $cursos->update();
+        //insert into courses(title, description, price, imagen, id_instructor,) values ()
+        return redirect()->route('cursos');
+    }
+
+    //metodo para eliminar un curso
+    public function destroy($id)
+    {
+        //delete from courses where id = ?
+        // $cursos = DB::table(Cursos)->where('id', '=', $id)->delete();
+        // $curso = Cursos::where('id', '=', $id)->delete();
+        $curso = Cursos::all()->find($id)->delete();
+
+
+        return redirect()->route('cursos');
+    }
 }
