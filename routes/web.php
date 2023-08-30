@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\CursosController;
+use App\Http\Controllers\PDFController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -43,3 +44,7 @@ Route::get('/editar/{id}', [CursosController::class, 'editar'])->name('editarCur
 Route::put('/actualizar/{id}', [CursosController::class, 'update'])->name('actualizarCurso');
 
 Route::delete('/eliminar/{id}', [CursosController::class, 'destroy'])->name('eliminarCurso');
+
+
+// apartado de reportes
+Route::get('/reporte_cursos', [PDFController::class, 'listaCursos'])->name('reporte_cursos');
