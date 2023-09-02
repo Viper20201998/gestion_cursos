@@ -14,7 +14,7 @@ class CursosController extends Controller
     {
         // consulta para obtener el nombre del instructor y la informacion del curso #inner join, ON SELECT courses.*, instructor.name AS instructor FROM courses INNER JOIN instructor ON courses.id_instructor = instructor.id;
         //all(),
-        $cursos = Cursos::join('instructor', 'courses.id_instructor', '=', 'instructor.id')->select('courses.*', 'instructor.name AS instructor')->get();
+        $cursos = Cursos::query()->join('instructor', 'courses.id_instructor', '=', 'instructor.id')->select('courses.*', 'instructor.name AS instructor')->get();
         return view('paginas.cursos', array("cursos" => $cursos));
     }
 
@@ -88,7 +88,7 @@ class CursosController extends Controller
     {
 
         //select * from table where id = 4 => find()
-        $curso = Cursos::join('instructor', 'courses.id_instructor', '=', 'instructor.id')->select('courses.*', 'instructor.name')->find($id);
+        $curso = Cursos::query()->join('instructor', 'courses.id_instructor', '=', 'instructor.id')->select('courses.*', 'instructor.name')->find($id);
 
         $instructores = Instructor::all();
         return view("paginas.editar_curso", array("curso" => $curso, "instructores" => $instructores));
